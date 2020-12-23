@@ -17,7 +17,12 @@
               </myswiper>
               <div class="teach_con_leftswiper">
                 <!-- 轮播图 -->
-                <myswiper swipeid="z_teach" :slidesPerView="4.3" effect="slide" :pagination="false">
+                <myswiper
+                  swipeid="z_teach"
+                  :slidesPerView="4.3"
+                  effect="slide"
+                  :pagination="false"
+                >
                   <div class="swiper-slide" slot="swiper-con">
                     <img src="http://script.zxxk.com/flash/ad201215.jpg" />1
                   </div>
@@ -52,10 +57,10 @@
               <Title>课程进展</Title>
               <dl>
                 <dt>
-                  <img src="http://img.zxxk.com/rbm/bundle_cover/2034286.png" />
+                  <img :src="onepro.n_img" />
                 </dt>
                 <dd>
-                  <h4>{{onepro.title}}</h4>
+                  <h4>{{ onepro.title }}</h4>
                   <p>
                     年北京高三数学二模分类汇编北京高三数学二模分类汇编年北京高三数学二编......
                   </p>
@@ -63,7 +68,9 @@
               </dl>
               <ul>
                 <li>
-                  <CircleText v-for="(item,i) in progress" :key="i"
+                  <CircleText
+                    v-for="(item, i) in progress"
+                    :key="i"
                     :text="item.title"
                   ></CircleText>
                 </li>
@@ -86,17 +93,17 @@
           <span>教研交流</span>
           <div>
             <p>
-              <span class="active">教学思想理念</span
-              >|<span>教学规划设计</span>|<span>教学策略方法</span>|<span>学习策略方法</span>|<span
-                >考试评估分析</span
+              <span v-for="(item, i) in categoryList" :key="i" @mouseover="tabTeach(item.c_id,i)" 
+                ><font :class="[index==i?'active':'']">{{ item.c_title }}</font
+                >|</span
               >
             </p>
             <font>更多</font>
           </div>
         </div>
         <ul>
-          <li>
-            <CircleText text="2019年北京高三数学二模分类汇编"></CircleText>
+          <li v-for="(item,i) in teaching" :key="i">
+            <CircleText :text="item.l_title"></CircleText>
           </li>
         </ul>
         <div class="teach_research_swiper">
@@ -106,15 +113,21 @@
             effect="slide"
             :spaceBetween="10"
           >
-            <div class="swiper-slide" slot="swiper-con" v-for="(item,i) in swiperLesson" :key="i">
+            <div
+              class="swiper-slide"
+              slot="swiper-con"
+              v-for="(item, i) in swiperLesson"
+              :key="i"
+            >
               <p>
-                <img
-                  :src="item.img"
-                />
+                <img :src="item.img" />
               </p>
               <div>
-                <h4>{{item.se_name}}</h4>
-                <p><font>{{item.e_name}}</font><font>{{item.bb_name}}</font></p>
+                <h4>{{ item.se_name }}</h4>
+                <p>
+                  <font>{{ item.e_name }}</font
+                  ><font>{{ item.bb_name }}</font>
+                </p>
                 <button><b></b>下载</button>
               </div>
             </div>
@@ -165,13 +178,11 @@
         </div>
         <dl>
           <dt>
-            <img
-              :src="imgsrc"
-            />
+            <img :src="imgsrc" />
           </dt>
           <dd>
-            <div v-for="(item,i) in onenew" :key="i">
-              <h4>{{item.title}}</h4>
+            <div v-for="(item, i) in onenew" :key="i">
+              <h4>{{ item.title }}</h4>
               <p>
                 多部门出台新规剑指直播带货乱象
                 未来监管只会更严多部门出台新规监管只会更严多部门出台新规象未来监管只会更严
@@ -183,7 +194,7 @@
           </dd>
         </dl>
         <ul>
-          <li v-for="(item,i) in newList" :key="i">
+          <li v-for="(item, i) in newList" :key="i">
             <CircleText :text="newList.title"></CircleText>
           </li>
         </ul>
@@ -204,23 +215,26 @@ import myswiper from "@/components/swiper/Index.vue";
 export default {
   data() {
     return {
-      imgsrc:'',
-      onepro:{},
+      categoryList: [],
+      index:0,
+      c_id: 1,
+      imgsrc: "",
+      onepro: {},
       progress: {}, //课题进展
       resources: [], //资源下载
-      teaching: [],//教材交流
-      onenew:[],
-      newList:[],//新闻列表
-      newbestlist:[],
-      hotbestlist:[],
-      swiperLesson:[],//课节轮播
+      teaching: [], //教材交流
+      onenew: [],
+      newList: [], //新闻列表
+      newbestlist: [],
+      hotbestlist: [],
+      swiperLesson: [], //课节轮播
     };
   },
   mounted() {
     this.axios.get("/api/index/System/getTopic").then((res) => {
       if (res.data.code == 200) {
-        this.onepro=res.data.data[0],
-        this.progress=res.data.data.slice(1);
+        (this.onepro = res.data.data[0]),
+          (this.progress = res.data.data.slice(1));
       } else {
         alert(res.data.descb);
       }
@@ -232,27 +246,44 @@ export default {
         alert(res.data.descb);
       }
     });
-    this.axios.post("/api/index/System/learning", {}).then((res) => {
-
-    });
+   this.learn()
     // 教育资讯
-     this.axios.get("/api/index/System/newsList").then((res) => {
-      if(res.data.code==200){
-         this.imgsrc=res.data.data[0].n_img;
-        this.onenew=res.data.data.slice(0,2);
-        this.newList=res.data.data.slice(2);
+    this.axios.get("/api/index/System/newsList").then((res) => {
+      if (res.data.code == 200) {
+        this.imgsrc = res.data.data[0].n_img;
+        this.onenew = res.data.data.slice(0, 2);
+        this.newList = res.data.data.slice(2);
       }
     });
     // 最新最热下载
     //课节轮播
-    this.axios.get("/api/index/System/getBsection").then((res)=>{
-      if(res.data.code==200){
-        this.swiperLesson=res.data.data;
-        console.log(this.swiperLesson)
+    this.axios.get("/api/index/System/getBsection").then((res) => {
+      if (res.data.code == 200) {
+        this.swiperLesson = res.data.data;
+        console.log(this.swiperLesson);
       }
-    })
+    });
   },
-  methods: {},
+  methods: {
+    learn(){
+      this.axios.post("/api/index/System/learning", {category:this.c_id}).then((res) => {
+      if (res.data.code == 200) {
+        console.log( res.data.data)
+        this.categoryList = res.data.data.category;
+        this.teaching = res.data.data.learning;
+      } else {
+        alert(res.data.descb);
+      }
+    });
+    },
+    // 教研交流切换
+    tabTeach(id,i){
+      this.index=i;
+      this.c_id=id;
+      this.teaching = [];
+      this.learn()
+    }
+  },
   components: {
     Header,
     NavCon,
@@ -278,7 +309,7 @@ export default {
       left: 50%;
       margin-left: -400px;
       width: 1000px;
-      z-index:2;
+      z-index: 2;
       .teach_con_body {
         display: flex;
         justify-content: space-between;
@@ -457,8 +488,8 @@ export default {
               font-size: 12px;
               color: #fff;
               cursor: pointer;
-              &:hover{
-                background:#90090d
+              &:hover {
+                background: #90090d;
               }
               b {
                 width: 19px;
@@ -534,12 +565,16 @@ export default {
           color: #dedede;
           margin-right: 60px;
           span {
-            margin: 0 20px;
             height: 50px;
-            color: #427bb5;
-            &.active {
-              color: #b9151e;
-              border-bottom: 3px solid #b9151e;
+            display: flex;
+            font {
+              margin:0 20px;
+              color: #427bb5;
+              height:50px;
+              &.active {
+                color: #b9151e;
+                border-bottom: 3px solid #b9151e;
+              }
             }
           }
         }
@@ -636,7 +671,7 @@ export default {
               font-size: 18px;
               color: #b03333;
               line-height: 32px;
-              &:hover{
+              &:hover {
                 text-decoration: underline;
               }
             }
