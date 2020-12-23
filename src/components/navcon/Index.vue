@@ -12,17 +12,9 @@
     </div>
     <div class="nav_left">
       <div class="nav_con">
-        <p><span class="active">小学</span><span>初中</span><span>高中</span></p>
+        <p><span v-for="(item,i) in lesson" :key="i" @mouseenter="toTabLesson(item.p_id,i)" :class="[index==i?'active':'']">{{item.p_name}}</span></p>
         <ul>
-          <li>语文</li>
-          <li>数学</li>
-          <li>英语</li>
-          <li>物理</li>
-          <li>化学</li>
-          <li>生物</li>
-          <li>历史</li>
-          <li>地理</li>
-          <li>政治</li>
+          <li v-for="(item,i) in subject.subject" :key="i">{{item.s_name}}</li>
         </ul>
       </div>
     </div>
@@ -30,7 +22,31 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data(){
+    return{
+      lesson:[],
+      subject:{},
+      index:0,
+    }
+  },
+    mounted() {
+          //左侧课节
+    this.axios.get("/api/index/System/indexBooksList").then((res) => {
+      if (res.data.code == 200) {
+        this.lesson=res.data.data;
+        this.toTabLesson(res.data.data[0].p_id,this.index)
+      }
+    });
+    },
+    methods:{
+      toTabLesson(id,index){
+        this.index=index;
+        this.subject=this.lesson.find((item)=>item.p_id==id);
+        console.log(this.subject)
+      }
+    }
+};
 </script>
 
 <style  lang="less" scoped>
@@ -75,7 +91,6 @@ export default {};
       width: 186px;
       height: 508px;
       background: #868585;
-       
     }
     p {
       height: 44px;
@@ -86,7 +101,7 @@ export default {};
         display: flex;
         flex: 1;
         justify-content: center;
-       
+        cursor: pointer;
         &.active{
              background: #868585;
         }

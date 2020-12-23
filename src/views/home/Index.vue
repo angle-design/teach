@@ -8,11 +8,15 @@
           <div class="teach_con_body">
             <div class="teach_con_left">
               <myswiper swipeid="q_teach">
-                <div class="swiper-slide" slot="swiper-con">
-                  <img src="http://script.zxxk.com/flash/js200925.jpg" />
-                </div>
-                <div class="swiper-slide" slot="swiper-con">
-                  <img src="http://script.zxxk.com/flash/js201214.jpg" />
+                <div
+                  class="swiper-slide"
+                  slot="swiper-con"
+                  v-for="(item, i) in swiperOne"
+                  :key="i"
+                >
+                  <a :href="item.ac_url" target="_blank"
+                    ><img :src="item.ac_img"
+                  /></a>
                 </div>
               </myswiper>
               <div class="teach_con_leftswiper">
@@ -23,29 +27,15 @@
                   effect="slide"
                   :pagination="false"
                 >
-                  <div class="swiper-slide" slot="swiper-con">
-                    <img src="http://script.zxxk.com/flash/ad201215.jpg" />1
-                  </div>
-                  <div class="swiper-slide" slot="swiper-con">
-                    <img src="http://script.zxxk.com/flash/ad201215.jpg" />2
-                  </div>
-                  <div class="swiper-slide" slot="swiper-con">
-                    <img src="http://script.zxxk.com/flash/ad201215.jpg" />3
-                  </div>
-                  <div class="swiper-slide" slot="swiper-con">
-                    <img src="http://script.zxxk.com/flash/ad201215.jpg" />4
-                  </div>
-                  <div class="swiper-slide" slot="swiper-con">
-                    <img src="http://script.zxxk.com/flash/ad201215.jpg" />1
-                  </div>
-                  <div class="swiper-slide" slot="swiper-con">
-                    <img src="http://script.zxxk.com/flash/ad201215.jpg" />2
-                  </div>
-                  <div class="swiper-slide" slot="swiper-con">
-                    <img src="http://script.zxxk.com/flash/ad201215.jpg" />3
-                  </div>
-                  <div class="swiper-slide" slot="swiper-con">
-                    <img src="http://script.zxxk.com/flash/ad201215.jpg" />4
+                  <div
+                    class="swiper-slide"
+                    slot="swiper-con"
+                    v-for="(item, i) in swiperTwo"
+                    :key="i"
+                  >
+                    <a :href="item.ac_url" target="_blank"
+                      ><img :src="item.ac_img"
+                    /></a>
                   </div>
                 </myswiper>
                 <!-- 左右导航栏 -->
@@ -93,8 +83,13 @@
           <span>教研交流</span>
           <div>
             <p>
-              <span v-for="(item, i) in categoryList" :key="i" @mouseover="tabTeach(item.c_id,i)" 
-                ><font :class="[index==i?'active':'']">{{ item.c_title }}</font
+              <span
+                v-for="(item, i) in categoryList"
+                :key="i"
+                @mouseover="tabTeach(item.c_id, i)"
+                ><font :class="[index == i ? 'active' : '']">{{
+                  item.c_title
+                }}</font
                 >|</span
               >
             </p>
@@ -102,7 +97,7 @@
           </div>
         </div>
         <ul>
-          <li v-for="(item,i) in teaching" :key="i">
+          <li v-for="(item, i) in teaching" :key="i">
             <CircleText :text="item.l_title"></CircleText>
           </li>
         </ul>
@@ -145,27 +140,23 @@
           </div>
         </div>
         <ul>
-          <li>
-            <PicText
-              text="2020北京空中课堂高二数学(人教B版选修1-1,课件+教案+学习任务单)"
-            ></PicText>
-            <span>2020-12-03</span>
+          <li v-for="(item, i) in newbestlist" :key="i">
+            <PicText :text="item.bo_name"></PicText>
+            <span>{{ item.create_at.split(" ")[0] }}</span>
           </li>
         </ul>
       </div>
       <div class="teach_research new_upload hot_upload">
         <div class="research_h3">
-          <span>最新下载</span>
+          <span>最热下载</span>
           <div>
             <font>更多</font>
           </div>
         </div>
         <ul>
-          <li>
-            <PicText
-              text="2020北京空中课堂高二数学(人教B版选修1-1,课件+教案+学习任务单)"
-            ></PicText>
-            <span>2020-12-03</span>
+          <li v-for="(item, i) in hotbestlist" :key="i">
+            <PicText :text="item.bo_name"></PicText>
+            <span>{{ item.create_at.split(" ")[0] }}</span>
           </li>
         </ul>
       </div>
@@ -182,7 +173,9 @@
           </dt>
           <dd>
             <div v-for="(item, i) in onenew" :key="i">
-              <h4>{{ item.title }}</h4>
+              <h4>
+                <a href="#" target="_blank">{{ item.title }}</a>
+              </h4>
               <p>
                 多部门出台新规剑指直播带货乱象
                 未来监管只会更严多部门出台新规监管只会更严多部门出台新规象未来监管只会更严
@@ -215,8 +208,11 @@ import myswiper from "@/components/swiper/Index.vue";
 export default {
   data() {
     return {
+      lesson: [],
+      swiperOne: [],
+      swiperTwo: [],
       categoryList: [],
-      index:0,
+      index: 0,
       c_id: 1,
       imgsrc: "",
       onepro: {},
@@ -231,6 +227,31 @@ export default {
     };
   },
   mounted() {
+    // 轮播图
+    this.axios
+      .get("/api/index/System/activity", {
+        params: {
+          type: 0,
+        },
+      })
+      .then((res) => {
+        if (res.data.code == 200) {
+          this.swiperOne = res.data.data;
+        }
+      });
+    // 小轮播
+    this.axios
+      .get("/api/index/System/activity", {
+        params: {
+          type: 1,
+        },
+      })
+      .then((res) => {
+        if (res.data.code == 200) {
+          this.swiperTwo = res.data.data;
+          console.log(res.data.data);
+        }
+      });
     this.axios.get("/api/index/System/getTopic").then((res) => {
       if (res.data.code == 200) {
         (this.onepro = res.data.data[0]),
@@ -246,7 +267,7 @@ export default {
         alert(res.data.descb);
       }
     });
-   this.learn()
+    this.learn();
     // 教育资讯
     this.axios.get("/api/index/System/newsList").then((res) => {
       if (res.data.code == 200) {
@@ -256,33 +277,51 @@ export default {
       }
     });
     // 最新最热下载
+    this.axios
+      .post("/api/index/System/getBooksList", { order: "bo_count" })
+      .then((res) => {
+        if (res.data.code == 200) {
+          this.hotbestlist = res.data.data;
+        } else {
+          alert(res.data.descb);
+        }
+      });
+    this.axios
+      .post("/api/index/System/getBooksList", { order: "bl_create_at" })
+      .then((res) => {
+        if (res.data.code == 200) {
+          this.newbestlist = res.data.data;
+        } else {
+          alert(res.data.descb);
+        }
+      });
     //课节轮播
     this.axios.get("/api/index/System/getBsection").then((res) => {
       if (res.data.code == 200) {
         this.swiperLesson = res.data.data;
-        console.log(this.swiperLesson);
       }
     });
   },
   methods: {
-    learn(){
-      this.axios.post("/api/index/System/learning", {category:this.c_id}).then((res) => {
-      if (res.data.code == 200) {
-        console.log( res.data.data)
-        this.categoryList = res.data.data.category;
-        this.teaching = res.data.data.learning;
-      } else {
-        alert(res.data.descb);
-      }
-    });
+    learn() {
+      this.axios
+        .post("/api/index/System/learning", { category: this.c_id })
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.categoryList = res.data.data.category;
+            this.teaching = res.data.data.learning;
+          } else {
+            alert(res.data.descb);
+          }
+        });
     },
     // 教研交流切换
-    tabTeach(id,i){
-      this.index=i;
-      this.c_id=id;
+    tabTeach(id, i) {
+      this.index = i;
+      this.c_id = id;
       this.teaching = [];
-      this.learn()
-    }
+      this.learn();
+    },
   },
   components: {
     Header,
@@ -382,10 +421,11 @@ export default {
               width: 110px;
               height: 100px;
               overflow: hidden;
+              border-radius: 10px;
               img {
                 width: 110px;
                 height: 100px;
-                border-radius: 10px;
+                
               }
             }
             dd {
@@ -568,9 +608,9 @@ export default {
             height: 50px;
             display: flex;
             font {
-              margin:0 20px;
+              margin: 0 20px;
               color: #427bb5;
-              height:50px;
+              height: 50px;
               &.active {
                 color: #b9151e;
                 border-bottom: 3px solid #b9151e;
@@ -668,11 +708,14 @@ export default {
             margin-top: 15px;
             line-height: 24px;
             h4 {
-              font-size: 18px;
               color: #b03333;
               line-height: 32px;
-              &:hover {
-                text-decoration: underline;
+              a {
+                color: #b03333;
+                   text-decoration: none;
+                &:hover {
+                  text-decoration: underline;
+                }
               }
             }
             p {
