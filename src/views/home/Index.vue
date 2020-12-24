@@ -417,6 +417,7 @@ export default {
             display: flex;
             justify-content: space-between;
             margin-top: 15px;
+             cursor: pointer;
             dt {
               width: 110px;
               height: 100px;

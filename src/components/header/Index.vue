@@ -6,14 +6,63 @@
         <input type="text" placeholder="请输入关键字" />
         <span><font></font></span>
       </div>
-      <span class="login">登陆</span>
-      <span class="register">注册</span>
+      <span class="login" @click="goLogin">登陆</span>
+    </div>
+    <div class="pup" v-if="flag">
+      <p v-html="codeData.img"></p>
     </div>
   </header>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      codeData: {},
+      flag: false,
+      loginflag:false,
+    };
+  },
+  methods: {
+    goLogin() {
+      this.axios
+        .get("/api/index/index/generrate")
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.flag = true;
+            this.codeData = res.data.data;
+              setInterval(()=>{
+                this.isLogin()
+            },2000)
+          } else {
+            console.log(res.data.desc);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //检测是不是登录了
+    isLogin() {
+      if(this.loginflag) return;
+      this.axios
+        .get("/api/index/index/checkLogin", {
+          params: { ticket: this.codeData.ticket},
+        })
+        .then((res) => {
+          console.log(res)
+          if (res.data.code == 200) {
+            this.loginflag=true;
+          } else {
+            this.loginflag=true;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -32,7 +81,6 @@ export default {};
     background: url(@bgurl) no-repeat;
     background-size: @size;
     background-position: -40px -24px;
-
   }
   .nav_right {
     display: flex;
@@ -58,7 +106,7 @@ export default {};
         height: 30px;
         background: #363636;
         display: flex;
-        align-items:center;
+        align-items: center;
         justify-content: center;
         font {
           background: url(@bgurl) no-repeat;
@@ -85,6 +133,22 @@ export default {};
         margin-left: 8px;
       }
     }
+  }
+}
+.pup {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  p {
+    width: 200px;
+    height: 200px;
   }
 }
 </style>

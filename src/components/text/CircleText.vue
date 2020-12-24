@@ -22,6 +22,10 @@ export default {
   font-size: 14px;
   position: relative;
   padding-left: 10px;
+  cursor: pointer;
+  &:hover{
+    color:#b9151e;
+  }
   &:after {
     content: "";
     position: absolute;
