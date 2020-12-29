@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/views/home/Index.vue';
-import denglu from '@/views/login/Index.vue';
-import zhuce from '@/views/login/Register.vue';
+import Teach from '@/views/teach/Index.vue';
 Vue.use(Router)
 
 export default new Router({
@@ -18,9 +17,9 @@ export default new Router({
       component: Index
     },
     {
-      path: '/login',
-      name: 'denglu',
-      component: denglu
+      path: '/teach',
+      name: 'Teach',
+      component: Teach
     }
   ]
 })
