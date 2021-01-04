@@ -15,13 +15,11 @@ export default {};
 .foot {
   width: 100%;
   height: 100px;
-  background: #eaeaea;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 14px;
   justify-content: center;
-  margin-top:60px;
   h3 {
     font-size: 22px;
     line-height:30px;

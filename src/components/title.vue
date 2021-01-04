@@ -1,5 +1,5 @@
 <template>
-    <h3 class="title"><slot></slot><span>更多</span></h3>
+    <h3 class="title"><slot></slot></h3>
 </template>
 
 <script>
@@ -10,7 +10,7 @@ export default {
 
 <style lang="less" scoped>
     .title{
-        border-bottom:1px dashed #b5b4b4;
+        // border-bottom:1px dashed #b5b4b4;
         font-size:18px;
         height:40px;
         line-height:44px;

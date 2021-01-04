@@ -1,5 +1,5 @@
 <template>
-  <p class="circletext">{{ text }}</p>
+  <p class="circletext"><font>{{ text }}</font><slot></slot></p>
 </template>
 
 <script>
@@ -15,13 +15,25 @@ export default {
 @size:260px 260px;
 .circletext {
   display: block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+
   line-height: 28px;
   font-size: 14px;
   position: relative;
   padding-left: 10px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  &>font{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+  }
+ 
+  &>font:hover{
+    color:#b9151e;
+    text-decoration: underline;
+  }
   &:after {
     content: "";
     position: absolute;

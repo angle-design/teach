@@ -44,7 +44,7 @@
               </div>
             </div>
             <div class="teach_con_right">
-              <Title>课程进展</Title>
+              <Title>课程进展<span>更多</span></Title>
               <dl>
                 <dt>
                   <img :src="onepro.n_img" />
@@ -69,7 +69,7 @@
           </div>
           <!-- 资源推荐 -->
           <div class="resources">
-            <Title>资源推荐</Title>
+            <Title>资源推荐<span>更多</span></Title>
             <ul>
               <li v-for="(item, i) in resources" :key="i">
                 <PicText :text="item.bo_name"></PicText>
@@ -193,7 +193,7 @@
         </ul>
       </div>
     </main>
-    <Foot></Foot>
+    <div class="footer"><Foot></Foot></div>
   </div>
 </template>
 
@@ -257,14 +257,14 @@ export default {
         (this.onepro = res.data.data[0]),
           (this.progress = res.data.data.slice(1));
       } else {
-        alert(res.data.descb);
+        // alert(res.data.descb);
       }
     });
     this.axios.get("/api/index/System/recommend").then((res) => {
       if (res.data.code == 200) {
         this.resources = res.data.data;
       } else {
-        alert(res.data.descb);
+        // alert(res.data.descb);
       }
     });
     this.learn();
@@ -283,7 +283,7 @@ export default {
         if (res.data.code == 200) {
           this.hotbestlist = res.data.data;
         } else {
-          alert(res.data.descb);
+          // alert(res.data.descb);
         }
       });
     this.axios
@@ -292,7 +292,7 @@ export default {
         if (res.data.code == 200) {
           this.newbestlist = res.data.data;
         } else {
-          alert(res.data.descb);
+          // alert(res.data.descb);
         }
       });
     //课节轮播
@@ -339,6 +339,9 @@ export default {
 @bgurl: "../../assets/icon.png";
 @size:260px 260px;
 .teach_home {
+  .title{
+    border-bottom:1px dashed #b5b4b4;
+  }
   .teach_top {
     position: relative;
     margin: 0 auto;
@@ -417,6 +420,7 @@ export default {
             display: flex;
             justify-content: space-between;
             margin-top: 15px;
+            cursor: pointer;
             dt {
               width: 110px;
               height: 100px;
@@ -425,7 +429,6 @@ export default {
               img {
                 width: 110px;
                 height: 100px;
-                
               }
             }
             dd {
@@ -712,7 +715,7 @@ export default {
               line-height: 32px;
               a {
                 color: #b03333;
-                   text-decoration: none;
+                text-decoration: none;
                 &:hover {
                   text-decoration: underline;
                 }
@@ -727,5 +730,8 @@ export default {
       }
     }
   }
+}
+.footer{
+  background: #eaeaea;
 }
 </style>

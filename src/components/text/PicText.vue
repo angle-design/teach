@@ -20,6 +20,10 @@ export default {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  cursor: pointer;
+    &:hover{
+    color:#b9151e;
+  }
   &:after {
     content: "";
     position: absolute;
