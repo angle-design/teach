@@ -7,12 +7,13 @@
         <div class="teach_con">
           <div class="teach_con_body">
             <div class="teach_con_left">
-              <myswiper swipeid="q_teach">
+              <myswiper swipeid="q_teach" v-if="aflag">
                 <div
                   class="swiper-slide"
                   slot="swiper-con"
                   v-for="(item, i) in swiperOne"
                   :key="i"
+                  
                 >
                   <a :href="item.ac_url" target="_blank"
                     ><img :src="item.ac_img"
@@ -23,9 +24,11 @@
                 <!-- 轮播图 -->
                 <myswiper
                   swipeid="z_teach"
-                  :slidesPerView="4.3"
+                  :slidesPerView="4"
                   effect="slide"
                   :pagination="false"
+                  :spaceBetween="10"
+                   v-if="bflag"
                 >
                   <div
                     class="swiper-slide"
@@ -107,6 +110,7 @@
             :slidesPerView="4"
             effect="slide"
             :spaceBetween="10"
+          v-if="cflag"
           >
             <div
               class="swiper-slide"
@@ -224,6 +228,9 @@ export default {
       newbestlist: [],
       hotbestlist: [],
       swiperLesson: [], //课节轮播
+      aflag:false,
+      bflag:false,
+      cflag:false
     };
   },
   mounted() {
@@ -237,6 +244,7 @@ export default {
       .then((res) => {
         if (res.data.code == 200) {
           this.swiperOne = res.data.data;
+          this.aflag=true;
         }
       });
     // 小轮播
@@ -249,7 +257,7 @@ export default {
       .then((res) => {
         if (res.data.code == 200) {
           this.swiperTwo = res.data.data;
-          console.log(res.data.data);
+          this.bflag=true;
         }
       });
     this.axios.get("/api/index/System/getTopic").then((res) => {
@@ -299,8 +307,10 @@ export default {
     this.axios.get("/api/index/System/getBsection").then((res) => {
       if (res.data.code == 200) {
         this.swiperLesson = res.data.data;
+         this.cflag=true;
       }
     });
+ 
   },
   methods: {
     learn() {
@@ -339,8 +349,8 @@ export default {
 @bgurl: "../../assets/icon.png";
 @size:260px 260px;
 .teach_home {
-  .title{
-    border-bottom:1px dashed #b5b4b4;
+  .title {
+    border-bottom: 1px dashed #b5b4b4;
   }
   .teach_top {
     position: relative;
@@ -369,12 +379,12 @@ export default {
           }
         }
         .teach_con_leftswiper {
-          width: 638px;
+          width: 624px;
           height: 60px;
           background: #f2f2f2;
           margin-top: 8px;
           position: relative;
-          padding: 5px 23px;
+          padding: 5px 30px;
           .swiper-container {
             width: 638px;
             height: 60px;
@@ -731,7 +741,7 @@ export default {
     }
   }
 }
-.footer{
+.footer {
   background: #eaeaea;
 }
 </style>

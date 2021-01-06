@@ -14,8 +14,19 @@
               <i class="jia">{{ flag == 1 ? "+" : "-" }}</i>
               <span>第一章 集合与函数概念</span>
             </template>
-            <el-menu-item>第一节 函数及其表示</el-menu-item>
-            <el-menu-item>第二节 函数的基本性质</el-menu-item>
+            <el-submenu index="1-4">
+              <template slot="title">第一节 函数及其表示</template>
+            </el-submenu>
+            <el-submenu index="1-4">
+              <template slot="title">第一节 函数及其表示</template>
+              <el-menu-item>第二节 函数的基本性质</el-menu-item>
+            </el-submenu>
+            <!-- <el-menu-item>第一节 函数及其表示</el-menu-item> -->
+
+            <el-submenu index="1-4">
+              <template slot="title">选项4</template>
+              <el-menu-item index="1-4-1">选项1</el-menu-item>
+            </el-submenu>
           </el-submenu>
           <el-submenu index="2">
             <template slot="title">
@@ -33,30 +44,50 @@
         <div class="resource_top">
           <div>
             <font>学段</font>
-            <p><span v-for="(item,i) in lesson.period" :key="i">{{item.p_name}}</span></p>
+            <p>
+              <span v-for="(item, i) in lesson.period" :key="i">{{
+                item.p_name
+              }}</span>
+            </p>
           </div>
           <div>
             <font>学科</font>
             <p>
-              <span v-for="(item,i) in lesson.subject" :key="i">{{item.s_name}}</span>
+              <span v-for="(item, i) in lesson.subject" :key="i">{{
+                item.s_name
+              }}</span>
             </p>
           </div>
           <div>
             <font>版本</font>
-            <p><span v-for="(item,i) in lesson.edition" :key="i">{{item.e_name}}</span></p>
+            <p>
+              <span v-for="(item, i) in lesson.edition" :key="i">{{
+                item.e_name
+              }}</span>
+            </p>
           </div>
           <div>
             <font>教材</font>
-            <p><span v-for="(item,i) in lesson.material" :key="i">{{item.e_name}}</span></p>
+            <p>
+              <span v-for="(item, i) in lesson.material" :key="i">{{
+                item.e_name
+              }}</span>
+            </p>
           </div>
-          
+
           <div>
             <font>内容</font>
-            <p><span v-for="(item,i) in lesson.content" :key="i">{{item.ct_name}}</span></p>
+            <p>
+              <span v-for="(item, i) in lesson.content" :key="i">{{
+                item.ct_name
+              }}</span>
+            </p>
           </div>
         </div>
         <div class="resource_body">
-            <FileItem><button><b></b>下载</button></FileItem>
+          <FileItem
+            ><button><b></b>下载</button></FileItem
+          >
         </div>
       </div>
       <!-- <div class="block">
@@ -75,31 +106,33 @@
 </template>
 
 <script>
-import FileItem from '../../components/FileItem'
+import FileItem from "../../components/FileItem";
 export default {
   name: "",
   data() {
     return {
-      lesson:{},
+      lesson: {},
       flag: 1,
     };
   },
   created() {},
   mounted() {
-    console.log(this.$route.query.p_id,this.$route.query.s_id)
-    this.getList(this.$route.query.p_id,this.$route.query.s_id)
+    console.log(this.$route.query.p_id, this.$route.query.s_id);
+    this.getList(this.$route.query.p_id, this.$route.query.s_id);
   },
-  components:{
-    FileItem
+  components: {
+    FileItem,
   },
   methods: {
     //获取页面数据
-    getList(p_id,s_id){
-      this.axios.post('/api/index/books/book',{p_id:p_id,s_id:s_id}).then((res)=>{
-        if(res.data.code==200){
-          this.lesson=res.data.data;
-        }
-      })
+    getList(p_id, s_id) {
+      this.axios
+        .post("/api/index/books/book", { p_id: p_id, s_id: s_id })
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.lesson = res.data.data;
+          }
+        });
     },
     handleOpen(key, keyPath) {
       this.flag = 2;
@@ -214,7 +247,6 @@ export default {
     }
     .resource_body {
       padding: 20px 0;
-     
     }
     .block {
       display: flex;
