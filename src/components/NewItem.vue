@@ -1,17 +1,17 @@
 <!--  -->
 <template>
-  <dl  v-if="item" >
+  <dl v-if="item" @click="toDetails(item.nid)">
     <dt>
-      <img 
-        :src="item.n_img"
-      />
+      <img :src="item.n_img" class="scal"/>
     </dt>
     <dd>
-      <h4>{{item.title}}</h4>
+      <h4>{{ item.title }}</h4>
       <p>
-        {{item.desc}}
+        {{ item.desc }}
       </p>
-      <font><slot></slot><font>{{item.create_at}}</font></font>
+      <font
+        ><slot></slot><font>{{ item.create_at }}</font></font
+      >
     </dd>
   </dl>
 </template>
@@ -20,9 +20,9 @@
 export default {
   name: "",
   props: {
-    item:{
-      type:Object,
-      default:{}
+    item: {
+      type: Object,
+      default: {},
     },
   },
   data() {
@@ -30,6 +30,14 @@ export default {
   },
   created() {},
   mounted() {},
+  methods: {
+    toDetails(id) {
+      let { href } = this.$router.resolve({
+        path: "/home/newdetails/" + id,
+      });
+      window.open(href, "_blank");
+    },
+  },
 };
 </script>
 <style scoped lang="less">
@@ -37,11 +45,15 @@ dl {
   padding: 25px 30px;
   border-bottom: 1px solid #ececec;
   display: flex;
+  cursor: pointer;
+  &:Hover{
+    background:#f8f8f8;
+  }
   dt {
     width: 154px;
     height: 98px;
     margin-right: 20px;
-    overflow:hidden;
+    overflow: hidden;
     img {
       width: 154px;
       height: 98px;
@@ -50,7 +62,7 @@ dl {
   dd {
     height: 98px;
     display: flex;
-      flex:1; 
+    flex: 1;
     justify-content: center;
     flex-direction: column;
     h4 {
@@ -60,13 +72,18 @@ dl {
     p {
       font-size: 14px;
       color: #666;
-      height:80px;
+      height: 80px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
     }
     font {
       font-size: 14px;
       color: #acacac;
       margin-top: 5px;
-      display:flex;
+      display: flex;
       justify-content: space-between;
     }
   }

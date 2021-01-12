@@ -10,6 +10,12 @@ import Info from '@/views/my/Info.vue';
 import UpDown from '@/views/my/UpDown.vue';
 import Teach from '@/views/teach/Index.vue';
 import Education from '@/views/educationnews/Index.vue';
+import Courseware from '@/views/courseware/Index.vue';
+import EduDeatail from '@/views/educationnews/Details.vue';
+import CourseDeatail from '@/views/coursedetails/Index.vue';
+import TopicDeatail from '@/views/topic/Details.vue';
+import Search from '@/views/search/Index.vue';
+import TeachDetails from '@/views/teach/Details.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -24,6 +30,7 @@ export default new Router({
       name: 'index',
       component: Index
     },
+    
     {
       path: '/home',
       name: 'Home',
@@ -34,9 +41,39 @@ export default new Router({
           redirect: 'resource'
         },
         {
+          path: 'search/:keyword',
+          name: 'Search',
+          component: Search,
+        },
+        {
+          path: 'newdetails/:id',
+          name: 'EduDeatail',
+          component: EduDeatail,
+        },
+        {
+          path: 'teachdetails/:id',
+          name: 'TeachDetails',
+          component: TeachDetails,
+        },
+        {
+          path: 'topicdetails/:id',
+          name: 'TopicDeatail',
+          component: TopicDeatail,
+        },
+        {
+          path: 'coursedetails/:id',
+          name: 'CourseDeatail',
+          component: CourseDeatail,
+        },
+        {
           path: 'resource',
           name: 'Resource',
           component: Resource
+        },
+        {
+          path: 'courseware',
+          name: 'Courseware',
+          component: Courseware
         },
         {
           path: 'teach',
@@ -51,7 +88,8 @@ export default new Router({
         {
           path: 'education',
           name: 'Education',
-          component: Education
+          component: Education,
+          
         },
         {
           path: 'my',

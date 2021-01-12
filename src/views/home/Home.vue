@@ -1,15 +1,15 @@
 <!--  -->
 <template>
   <div class="home">
-    <Header></Header>
+    <Header :type="1"></Header>
     <div class="topnav">
       <ul>
-        <router-link tag="li" to="/index">首页</router-link>
-        <router-link tag="li" to="/home/resource">资源下载</router-link>
+        <li><router-link tag="a" to="/index" target="_blank">首页</router-link></li>
+        <!-- <router-link tag="li" to="/home/resource">资源下载</router-link> -->
         <router-link tag="li" to="/home/teach">教研交流</router-link>
         <router-link tag="li" to="/home/education">教育资讯</router-link>
         <router-link tag="li" to="/home/topic">课题进展</router-link>
-        <router-link tag="li" to="/home/my">个人中心</router-link>
+        <router-link tag="li" to="/home/my" v-if="flag=='true'">个人中心</router-link>
       </ul>
     </div>
     <div class="home_body">
@@ -27,7 +27,12 @@ import Foot from "@/components/foot/Index.vue";
 export default {
   name: "",
   data() {
-    return {};
+    return {
+      flag:false
+    };
+  },
+  mounted(){
+    this.flag=localStorage.getItem('login');
   },
   components: {
     Header,
@@ -48,6 +53,13 @@ export default {
       cursor: pointer;
       &:hover {
         color: #b9151e;
+      }
+      a{
+        text-decoration: none;
+        color:#333;
+        &:hover{
+ color: #b9151e;
+        }
       }
       &.active,
       &.router-link-active {

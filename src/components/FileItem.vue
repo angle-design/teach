@@ -1,14 +1,12 @@
 <!--  -->
 <template>
   <div class="resource_item">
-    <img src="../assets/word.jpg" />
-    <p>
-      <b
-        >初高中教材衔接初高中教材衔接初高中教材衔接 第1课时 数与式
-        (课件PPT)-【优化指导】2020-2021学</b
-      >
-      <span><font>2020</font><font>人教版</font><font>必修一</font></span>
-    </p>
+   <i :class="getClass"></i>
+    <div>
+      <b>{{item.bo_name}}</b>
+      <span><font v-if="item.p_name">{{item.p_name}}</font><font v-if="item.s_name">{{item.s_name}}</font><font v-if="item.s_name">{{item.e_name}}</font></span>
+      <p><span v-if="item.create_at">时间：{{item.create_at}}</span><span v-if="item.bo_count">下载：{{item.bo_count}}次</span><span>大小：1993KB</span></p>
+    </div>
     <slot></slot>
     <!-- <button><b></b>下载</button> -->
   </div>
@@ -17,11 +15,26 @@
 <script>
 export default {
   name:"",
-  data() {
-    return {};
+ props:{
+   item:{}
+ },
+ data(){
+   return {
+     getClass:''
+   }
+ },
+  mounted() {
+    if(this.item.bo_suffix=='pdf'){
+      this.getClass='iconfont icon-pdf'
+    }else if(this.item.bo_suffix='docx'){
+       this.getClass='iconfont icon-word'
+    }else if(this.item.bo_suffix='xls'){
+      this.getClass='iconfont icon-xls'
+    }else{
+      this.getClass='iconfont icon-ppt'
+    }
+  
   },
-  created() {},
-  mounted() {},
 };
 </script>
 <style scoped lang="less">
@@ -35,11 +48,29 @@ export default {
   &:hover {
     border: 1px solid #bd2025;
   }
-  & > img {
+  & > i {
     margin-right: 20px;
+    font-size:80px;
+    color:#bd2025;
+    &.icon-word{
+      color:#6ccbff;
+    }
+     &.icon-ppt{
+      color:#ff8976;
+    }
+      &.icon-xls{
+      color:#2ea346;
+    }
   }
-  & > p {
-    span {
+  & > div {
+    width:630px;
+    b{
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      display: block;
+    }
+    &>span {
       display: block;
       margin-top: 10px;
       font {
@@ -48,6 +79,14 @@ export default {
         font-size: 14px;
         color: #999999;
         margin-right: 12px;
+      }
+    }
+    &>P{
+      font-size:14px;
+      color:#999;
+      margin-top:8px;
+      span{
+        margin-right:30px;
       }
     }
   }
@@ -63,13 +102,9 @@ export default {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    b {
-      width: 19px;
-      height: 19px;
-      display: inline-block;
-      background: url(/static/img/icon.68f2ae6.png) no-repeat;
-      background-size: 260px 260px;
-      background-position: -154px -175px;
+    i {
+      font-size:13px;
+      font-weight:bold;
     }
   }
 }

@@ -1,7 +1,6 @@
 import axios from 'axios'
 import router from '../router'
 
-import { Indicator } from 'mint-ui';
 // http request 拦截器
 var qs = require('qs');
 // 请求拦截
@@ -11,7 +10,7 @@ axios.interceptors.request.use(
       config.data = qs.stringify(config.data);
     }
     // 加载动画
-    Indicator.open();
+    // Indicator.open();
     return config;
   },
   error => {
@@ -22,12 +21,12 @@ axios.interceptors.request.use(
 // 响应拦截
 axios.interceptors.response.use(
   response => {
-    Indicator.close();
+    // Indicator.close();
     return response;
   },
   error => {
     // 错误提醒
-    Indicator.close();
+    // Indicator.close();
     return Promise.reject(error);
   }
 );

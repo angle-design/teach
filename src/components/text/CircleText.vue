@@ -15,12 +15,12 @@ export default {
 @size:260px 260px;
 .circletext {
   display: block;
-
   line-height: 28px;
   font-size: 14px;
   position: relative;
   padding-left: 10px;
   display: flex;
+  align-items: enter;
   justify-content: space-between;
   cursor: pointer;
   &>font{

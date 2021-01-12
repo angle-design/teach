@@ -1,14 +1,20 @@
 <!--  -->
 <template>
   <div class="hot">
-    <Title>热门资讯</Title>
-    <p class="hot_pic" @click="toDetails(hotNewData[0].nid)">
-      <img  class="scal"
-        :src="hotNewData[0].n_img"
-      /><span>{{hotNewData[0].title}}</span>
+    <Title>热门教研交流</Title>
+    <p class="hot_pic" @click="toTeachDetails(hotNewData[0].l_id)">
+      <img class="scal" :src="hotNewData[0].l_img" /><span>{{
+        hotNewData[0].l_title
+      }}</span>
     </p>
     <ul>
-      <li v-for="(item,i) in hotNewData.slice(1)" :key="i" @click="toDetails(item.nid)"><CircleText :text="item.title"></CircleText></li>
+      <li
+        v-for="(item, i) in hotNewData.slice(1)"
+        :key="i"
+        @click="toTeachDetails(item.l_id)"
+      >
+        <CircleText :text="item.l_title"></CircleText>
+      </li>
     </ul>
   </div>
 </template>
@@ -18,29 +24,27 @@ import Title from "@/components/title.vue";
 import CircleText from "@/components/text/CircleText.vue";
 export default {
   name: "",
-  data(){
+  props:{
+    type:0
+  },
+  data() {
     return {
-      hotNewData:[]
-    }
+      hotNewData: [],
+    };
   },
-  mounted(){
-    this.getList()
-  },
-  methods:{
-     getList() {
-      this.axios
-        .get("/api/index/files/getEducationInfo", {
-          params: { limit: 10, page: this.page },
-        })
+  mounted() {
+    this.axios
+        .post("/api/index/System/learning", { category: this.type })
         .then((res) => {
           if (res.data.code == 200) {
-            this.hotNewData=res.data.data.top;
+            this.hotNewData = res.data.data.learning;
           }
         });
-    },
-   toDetails(id) {
+  },
+  methods: {
+    toTeachDetails(id){
       let { href } = this.$router.resolve({
-        path: "/home/newdetails/" + id,
+        path: "/home/teachdetails/" + id,
       });
       window.open(href, "_blank");
     },

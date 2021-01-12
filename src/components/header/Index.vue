@@ -3,10 +3,13 @@
     <p></p>
     <div class="nav_right">
       <div class="search">
-        <input type="text" placeholder="请输入关键字" />
-        <span><font></font></span>
+        <input type="text" placeholder="请输入关键字" v-model="keyword" />
+        <span v-if="type == 1" @click="toSearch"><font></font></span>
+        <span v-else @click="toSearch1"><font></font></span>
       </div>
-      <span class="login" @click="goLogin">登陆</span>
+      <span class="login" @click="goLogin" v-if="loginflag == 'false'"
+        >登陆</span
+      >
     </div>
     <div class="pup" v-if="flag">
       <p v-html="codeData.img"></p>
@@ -16,28 +19,59 @@
 
 <script>
 export default {
+  props: {
+    type: 0,
+  },
   data() {
     return {
+      keyword: "",
       codeData: {},
       flag: false,
-      loginflag:false,
+      loginflag: false,
+      unsername: "",
     };
   },
+  mounted() {
+    this.loginflag = localStorage.getItem("login");
+    console.log(this.loginflag);
+  },
   methods: {
+    // 去搜索
+    toSearch() {
+      if (this.keyword == "") {
+        this.$message({
+          showClose: true,
+          message: "请输入关键字哦～",
+          type: "warning",
+        });
+        return;
+      }
+      let { href } = this.$router.resolve({
+        path: "/home/search/" + this.keyword,
+      });
+      window.open(href, "_blank");
+    },
+    toSearch1() {
+      if (this.keyword == "") {
+        this.$message({
+          showClose: true,
+          message: "请输入关键字哦～",
+          type: "warning",
+        });
+        return;
+      }
+      this.$router.push({ path: "/home/search/" + this.keyword });
+    },
     goLogin() {
       this.axios
         .get("/api/index/index/generrate")
         .then((res) => {
           if (res.data.code == 200) {
-            console.log(res.data.data)
             this.flag = true;
-
-            //  this.isLogin()
             this.codeData = res.data.data;
-    
-              setInterval(()=>{
-                this.isLogin()
-            },2000)
+            setInterval(() => {
+              this.isLogin();
+            }, 2000);
           } else {
             console.log(res.data.desc);
           }
@@ -48,23 +82,25 @@ export default {
     },
     //检测是不是登录了
     isLogin() {
-      if(this.loginflag) return;
+      if (this.loginflag == "true") return;
       this.axios
         .get("/api/index/index/checkLogin", {
-          params: { ticket: this.codeData.ticket},
+          params: { ticket: this.codeData.ticket },
         })
         .then((res) => {
-          console.log(res)
           if (res.data.code == 200) {
-            
-            this.loginflag=true;
+            this.loginflag = "true";
+            this.flag = false;
+            this.unsername = res.data.data.unsername;
+            localStorage.setItem("login", "true");
+            this.$forceUpdate();
+          } else if (res.data.code == 100006) {
+            this.loginflag = "true";
           } else {
-            this.loginflag=true;
+            this.loginflag = "false";
           }
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     },
   },
 };
@@ -113,6 +149,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+        cursor: pointer;
         font {
           background: url(@bgurl) no-repeat;
           background-size: @size;

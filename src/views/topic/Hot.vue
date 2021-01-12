@@ -1,14 +1,20 @@
 <!--  -->
 <template>
   <div class="hot">
-    <Title>热门资讯</Title>
-    <p class="hot_pic" @click="toDetails(hotNewData[0].nid)">
-      <img  class="scal"
-        :src="hotNewData[0].n_img"
-      /><span>{{hotNewData[0].title}}</span>
+    <Title>热门课题</Title>
+    <p class="hot_pic" @click="toDetails(hotNewData[0].toid)">
+      <img class="scal" :src="hotNewData[0].n_img" /><span>{{
+        hotNewData[0].title
+      }}</span>
     </p>
     <ul>
-      <li v-for="(item,i) in hotNewData.slice(1)" :key="i" @click="toDetails(item.nid)"><CircleText :text="item.title"></CircleText></li>
+      <li
+        v-for="(item, i) in hotNewData.slice(1)"
+        :key="i"
+        @click="toDetails(item.toid)"
+      >
+        <CircleText :text="item.title"></CircleText>
+      </li>
     </ul>
   </div>
 </template>
@@ -18,29 +24,22 @@ import Title from "@/components/title.vue";
 import CircleText from "@/components/text/CircleText.vue";
 export default {
   name: "",
-  data(){
+  data() {
     return {
-      hotNewData:[]
-    }
+      hotNewData: [],
+    };
   },
-  mounted(){
-    this.getList()
+  mounted() {
+    this.axios.get("/api/index/System/getTopic").then((res) => {
+      if (res.data.code == 200) {
+        this.hotNewData = res.data.data;
+      }
+    });
   },
-  methods:{
-     getList() {
-      this.axios
-        .get("/api/index/files/getEducationInfo", {
-          params: { limit: 10, page: this.page },
-        })
-        .then((res) => {
-          if (res.data.code == 200) {
-            this.hotNewData=res.data.data.top;
-          }
-        });
-    },
-   toDetails(id) {
+  methods: {
+    toDetails(id) {
       let { href } = this.$router.resolve({
-        path: "/home/newdetails/" + id,
+        path: "/home/topicdetails/" + id,
       });
       window.open(href, "_blank");
     },

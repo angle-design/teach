@@ -1,6 +1,6 @@
 <template>
   <div class="teach_home">
-    <Header></Header>
+    <Header :type="1"></Header>
     <main>
       <div class="teach_top">
         <NavCon></NavCon>
@@ -13,10 +13,9 @@
                   slot="swiper-con"
                   v-for="(item, i) in swiperOne"
                   :key="i"
-                  
                 >
                   <a :href="item.ac_url" target="_blank"
-                    ><img :src="item.ac_img"
+                    ><img :src="item.ac_img" class="scal"
                   /></a>
                 </div>
               </myswiper>
@@ -28,7 +27,7 @@
                   effect="slide"
                   :pagination="false"
                   :spaceBetween="10"
-                   v-if="bflag"
+                  v-if="bflag"
                 >
                   <div
                     class="swiper-slide"
@@ -37,7 +36,7 @@
                     :key="i"
                   >
                     <a :href="item.ac_url" target="_blank"
-                      ><img :src="item.ac_img"
+                      ><img :src="item.ac_img" class="scal"
                     /></a>
                   </div>
                 </myswiper>
@@ -47,35 +46,45 @@
               </div>
             </div>
             <div class="teach_con_right">
-              <Title>课程进展<span>更多</span></Title>
-              <dl>
+              <Title
+                >课程进展<span
+                  ><router-link tag="a" target="_blank" to="/home/topic"
+                    >更多</router-link
+                  ></span
+                ></Title
+              >
+              <dl @click="toTopic(onepro.toid)">
                 <dt>
-                  <img :src="onepro.n_img" />
+                  <img :src="onepro.n_img" class="scal" />
                 </dt>
                 <dd>
                   <h4>{{ onepro.title }}</h4>
                   <p>
-                    年北京高三数学二模分类汇编北京高三数学二模分类汇编年北京高三数学二编......
+                    {{ onepro.desc }}
                   </p>
                 </dd>
               </dl>
               <ul>
-                <li>
-                  <CircleText
-                    v-for="(item, i) in progress"
-                    :key="i"
-                    :text="item.title"
-                  ></CircleText>
+                <li
+                  v-for="(item, i) in progress"
+                  @click="toTopic(item.toid)"
+                  :key="i"
+                >
+                  <CircleText :text="item.title"></CircleText>
                 </li>
               </ul>
             </div>
           </div>
           <!-- 资源推荐 -->
           <div class="resources">
-            <Title>资源推荐<span>更多</span></Title>
+            <Title>资源推荐</Title>
             <ul>
-              <li v-for="(item, i) in resources" :key="i">
-                <PicText :text="item.bo_name"></PicText>
+              <li
+                v-for="(item, i) in resources"
+                :key="i"
+                @click="toCourse(item.bo_id)"
+              >
+                <PicText :item="item"></PicText>
               </li>
             </ul>
           </div>
@@ -96,11 +105,19 @@
                 >|</span
               >
             </p>
-            <font>更多</font>
+            <font
+              ><router-link tag="a" to="/home/teach" target="_blank"
+                >更多</router-link
+              ></font
+            >
           </div>
         </div>
-        <ul>
-          <li v-for="(item, i) in teaching" :key="i">
+        <ul style="height: 100px">
+          <li
+            v-for="(item, i) in teaching"
+            :key="i"
+            @click="toTeachDetails(item.l_id)"
+          >
             <CircleText :text="item.l_title"></CircleText>
           </li>
         </ul>
@@ -110,16 +127,18 @@
             :slidesPerView="4"
             effect="slide"
             :spaceBetween="10"
-          v-if="cflag"
+            v-if="cflag"
+            :pagination="false"
           >
             <div
               class="swiper-slide"
               slot="swiper-con"
               v-for="(item, i) in swiperLesson"
               :key="i"
+              @click="toCoursedetails(item)"
             >
               <p>
-                <img :src="item.img" />
+                <img :src="item.img" class="scal" />
               </p>
               <div>
                 <h4>{{ item.se_name }}</h4>
@@ -127,7 +146,7 @@
                   <font>{{ item.e_name }}</font
                   ><font>{{ item.bb_name }}</font>
                 </p>
-                <button><b></b>下载</button>
+                <button><i class="iconfont icon-xiazai1"></i>下载</button>
               </div>
             </div>
           </myswiper>
@@ -139,13 +158,14 @@
       <div class="teach_research new_upload">
         <div class="research_h3">
           <span>最新下载</span>
-          <div>
-            <font>更多</font>
-          </div>
         </div>
         <ul>
-          <li v-for="(item, i) in newbestlist" :key="i">
-            <PicText :text="item.bo_name"></PicText>
+          <li
+            v-for="(item, i) in newbestlist"
+            :key="i"
+            @click="toCourse(item.books_id)"
+          >
+            <PicText :item="item"></PicText>
             <span>{{ item.create_at.split(" ")[0] }}</span>
           </li>
         </ul>
@@ -153,13 +173,14 @@
       <div class="teach_research new_upload hot_upload">
         <div class="research_h3">
           <span>最热下载</span>
-          <div>
-            <font>更多</font>
-          </div>
         </div>
         <ul>
-          <li v-for="(item, i) in hotbestlist" :key="i">
-            <PicText :text="item.bo_name"></PicText>
+          <li
+            v-for="(item, i) in hotbestlist"
+            :key="i"
+            @click="toCourse(item.books_id)"
+          >
+            <PicText :item="item"></PicText>
             <span>{{ item.create_at.split(" ")[0] }}</span>
           </li>
         </ul>
@@ -168,31 +189,31 @@
         <div class="research_h3">
           <span>教育资讯</span>
           <div>
-            <font>更多</font>
+            <font
+              ><router-link tag="a" to="/home/education" target="_blank"
+                >更多</router-link
+              ></font
+            >
           </div>
         </div>
-        <dl>
+        <dl @click="toNew(item.nid)" v-for="(item, i) in onenew" :key="i">
           <dt>
-            <img :src="imgsrc" />
+            <img :src="imgsrc" class="scal" />
           </dt>
           <dd>
-            <div v-for="(item, i) in onenew" :key="i">
+            <div>
               <h4>
                 <a href="#" target="_blank">{{ item.title }}</a>
               </h4>
-              <p>
-                多部门出台新规剑指直播带货乱象
-                未来监管只会更严多部门出台新规监管只会更严多部门出台新规象未来监管只会更严
-                未新规象未来监管只新规象未来 象未来监管只会更严 未来监管只会更严
-                未来监管只会更严象未来监管只会更严 未来监管只会更严
-                未来监管只会更未.....
-              </p>
+              <p v-html="item.content"></p>
             </div>
           </dd>
         </dl>
         <ul>
-          <li v-for="(item, i) in newList" :key="i">
-            <CircleText :text="newList.title"></CircleText>
+          <li v-for="(item, i) in newList" :key="i" @click="toNew(item.nid)">
+            <CircleText :text="item.title"
+              ><span>{{ item.create_at.split(" ")[0] }}</span></CircleText
+            >
           </li>
         </ul>
       </div>
@@ -202,6 +223,7 @@
 </template>
 
 <script>
+import { Loading } from "element-ui";
 import Header from "@/components/header/Index.vue";
 import NavCon from "@/components/navcon/Index.vue";
 import Title from "@/components/title.vue";
@@ -228,13 +250,15 @@ export default {
       newbestlist: [],
       hotbestlist: [],
       swiperLesson: [], //课节轮播
-      aflag:false,
-      bflag:false,
-      cflag:false
+      aflag: false,
+      bflag: false,
+      cflag: false,
     };
   },
   mounted() {
     // 轮播图
+    Loading.service({ target: "body" });
+
     this.axios
       .get("/api/index/System/activity", {
         params: {
@@ -244,7 +268,7 @@ export default {
       .then((res) => {
         if (res.data.code == 200) {
           this.swiperOne = res.data.data;
-          this.aflag=true;
+          this.aflag = true;
         }
       });
     // 小轮播
@@ -257,7 +281,7 @@ export default {
       .then((res) => {
         if (res.data.code == 200) {
           this.swiperTwo = res.data.data;
-          this.bflag=true;
+          this.bflag = true;
         }
       });
     this.axios.get("/api/index/System/getTopic").then((res) => {
@@ -265,25 +289,30 @@ export default {
         (this.onepro = res.data.data[0]),
           (this.progress = res.data.data.slice(1));
       } else {
-        // alert(res.data.descb);
       }
     });
     this.axios.get("/api/index/System/recommend").then((res) => {
       if (res.data.code == 200) {
         this.resources = res.data.data;
       } else {
-        // alert(res.data.descb);
       }
     });
     this.learn();
     // 教育资讯
-    this.axios.get("/api/index/System/newsList").then((res) => {
-      if (res.data.code == 200) {
-        this.imgsrc = res.data.data[0].n_img;
-        this.onenew = res.data.data.slice(0, 2);
-        this.newList = res.data.data.slice(2);
-      }
-    });
+    this.axios
+      .get("/api/index/System/newsList", {
+        params: {
+          limit: 7,
+        },
+      })
+      .then((res) => {
+        if (res.data.code == 200) {
+          this.imgsrc = res.data.data[0].n_img;
+          this.onenew = res.data.data.slice(0, 1);
+
+          this.newList = res.data.data.slice(1);
+        }
+      });
     // 最新最热下载
     this.axios
       .post("/api/index/System/getBooksList", { order: "bo_count" })
@@ -307,12 +336,43 @@ export default {
     this.axios.get("/api/index/System/getBsection").then((res) => {
       if (res.data.code == 200) {
         this.swiperLesson = res.data.data;
-         this.cflag=true;
+        this.cflag = true;
       }
     });
- 
+    this.$nextTick(() => {
+      // 以服务的方式调用的 Loading 需要异步关闭
+      Loading.service({ target: "body" }).close();
+    });
   },
   methods: {
+    // 进入三级页
+    toCoursedetails(obj) {
+      // alert(obj);
+      let { href } = this.$router.resolve({
+        path: "/home/resource",
+        query: { p_id: obj.p_id, s_id: obj.s_id, se_id: obj.se_id },
+      });
+      window.open(href, "_blank");
+    },
+    // 进入资讯详情
+    toNew(id) {
+      let { href } = this.$router.resolve({
+        path: "/home/newdetails/" + id,
+      });
+      window.open(href, "_blank");
+    },
+    toTeachDetails(id) {
+      let { href } = this.$router.resolve({
+        path: "/home/teachdetails/" + id,
+      });
+      window.open(href, "_blank");
+    },
+    toTopic(id) {
+      let { href } = this.$router.resolve({
+        path: "/home/topicdetails/" + id,
+      });
+      window.open(href, "_blank");
+    },
     learn() {
       this.axios
         .post("/api/index/System/learning", { category: this.c_id })
@@ -321,9 +381,15 @@ export default {
             this.categoryList = res.data.data.category;
             this.teaching = res.data.data.learning;
           } else {
-            alert(res.data.descb);
+            // alert(res.data.descb);
           }
         });
+    },
+    toCourse(id) {
+      let { href } = this.$router.resolve({
+        path: "/home/coursedetails/" + id,
+      });
+      window.open(href, "_blank");
     },
     // 教研交流切换
     tabTeach(id, i) {
@@ -349,6 +415,14 @@ export default {
 @bgurl: "../../assets/icon.png";
 @size:260px 260px;
 .teach_home {
+  a {
+    margin-top: 10px;
+    color: #999;
+    text-decoration: none;
+    &:hover {
+      color: #b9151e;
+    }
+  }
   .title {
     border-bottom: 1px dashed #b5b4b4;
   }
@@ -361,7 +435,7 @@ export default {
       left: 50%;
       margin-left: -400px;
       width: 1000px;
-      z-index: 2;
+      z-index: 0;
       .teach_con_body {
         display: flex;
         justify-content: space-between;
@@ -452,6 +526,10 @@ export default {
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 line-height: 30px;
+                &:hover {
+                  text-decoration: underline;
+                  color: #b9151e;
+                }
               }
             }
           }
@@ -486,7 +564,7 @@ export default {
     .teach_research_swiper {
       height: 140px;
       position: relative;
-      margin: 20px 0 30px;
+      margin: 20px 0 20px;
       .swiper-container {
         width: 1100px;
         margin: 0 auto;
@@ -497,6 +575,7 @@ export default {
           padding: 5px;
           box-sizing: border-box;
           display: flex;
+          cursor: pointer;
           & > P {
             width: 102px;
             height: 128px;
@@ -541,16 +620,11 @@ export default {
               font-size: 12px;
               color: #fff;
               cursor: pointer;
+              i {
+                font-size: 12px;
+              }
               &:hover {
                 background: #90090d;
-              }
-              b {
-                width: 19px;
-                height: 19px;
-                display: inline-block;
-                background: url(@bgurl) no-repeat;
-                background-size: @size;
-                background-position: -154px -175px;
               }
             }
           }
@@ -586,20 +660,21 @@ export default {
       }
     }
     .research_h3 {
-      height: 50px;
+      height: 60px;
       border-bottom: 3px solid #dedede;
       display: flex;
-      line-height: 70px;
+      line-height: 80px;
       justify-content: space-between;
       font-size: 22px;
-      padding-left: 30px;
+      padding-left: 28px;
+      font-weight: bold;
       position: relative;
       &:after {
         content: "";
         width: 25px;
         height: 21px;
         position: absolute;
-        bottom: 5px;
+        bottom: 10px;
         left: 0;
         background: url(@bgurl) no-repeat;
         background-size: @size;
@@ -623,10 +698,23 @@ export default {
             font {
               margin: 0 20px;
               color: #427bb5;
-              height: 50px;
+              height: 60px;
+              line-height: 90px;
+              position: relative;
+
               &.active {
                 color: #b9151e;
-                border-bottom: 3px solid #b9151e;
+
+                &:after {
+                  animation: a 0.4s;
+                  content: "";
+                  width: 100%;
+                  height: 3px;
+                  background: #b9151e;
+                  position: absolute;
+                  bottom: -3px;
+                  left: 0;
+                }
               }
             }
           }
@@ -637,9 +725,11 @@ export default {
       display: flex;
       width: 100%;
       flex-wrap: wrap;
-      margin-top: 10px;
+      margin-top: 20px;
+      align-content: flex-start;
       li {
         line-height: 32px;
+        height: 32px;
         font-size: 14px;
         width: 50%;
         box-sizing: border-box;
@@ -694,6 +784,7 @@ export default {
     }
     &.education_new {
       margin-top: 10px;
+      padding-bottom: 40px;
       .research_h3 {
         &:after {
           width: 18px;
@@ -711,12 +802,15 @@ export default {
           margin-right: 20px;
           overflow: hidden;
           margin-top: 15px;
+          flex-shrink: 0;
           img {
             width: 246px;
             height: 176px;
           }
         }
         dd {
+          height:176px;
+          overflow: hidden;
           div {
             margin-top: 15px;
             line-height: 24px;
@@ -738,10 +832,31 @@ export default {
           }
         }
       }
+      ul {
+        li {
+          width: 47%;
+          padding-right: 10px;
+          &:nth-child(even) {
+            margin-left: 6%;
+          }
+          span {
+            font-size: 14px;
+            color: #acacac;
+          }
+        }
+      }
     }
   }
 }
 .footer {
   background: #eaeaea;
+}
+@keyframes a {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
 }
 </style>

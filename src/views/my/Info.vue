@@ -4,7 +4,7 @@
             <dt><img :src="info.u_headimg"></dt>
             <dd>
                 <span>{{info.username}}</span>
-                <font></font>
+                <!-- <font></font> -->
                 <!-- <font>用记名：{{info.username}}</font> -->
             </dd>
         </dl>
@@ -35,7 +35,7 @@ export default {
 @bgurl: "../../assets/icon.png";
 @size:260px 260px;
     .myInfo{
-        height:540px;
+        height:340px;
         padding-top:50px;
         display: flex;
         justify-content: center;

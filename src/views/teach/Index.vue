@@ -6,7 +6,8 @@
         <span v-for="(item,i) in teachList.category" :key="i" :class="[index==i?'active':'']" @click="toTab(i,item.c_id)">{{item.c_title}}</span>
       </p>
       <div class="teach_con">
-        <NewItem v-for="(item,i) in list" :key="i" :item="item"></NewItem>
+        <div v-for="(item,i) in list" :key="i" @click.capture="toTeachDetails(item.l_id)"><NewItem  :item="item"></NewItem></div>
+        
        <!--<NewItem imgflag="false"></NewItem> -->
       </div>
     </div>
@@ -28,6 +29,12 @@ export default {
       this.getList()
   },
   methods: {
+     toTeachDetails(id){
+      let { href } = this.$router.resolve({
+        path: "/home/teachdetails/" + id,
+      });
+      window.open(href, "_blank");
+    },
     getList() {
       this.axios
         .post("/api/index/System/learning", {
@@ -102,6 +109,16 @@ export default {
     .teach_con {
       background: #fff;
       border: 1px solid #ececec;
+      &>div{
+
+  border-bottom: 1px solid #ececec;
+  &:last-child{
+    border-bottom:0;
+  }
+  dl{
+    border:none
+  }
+      }
     }
   }
 }

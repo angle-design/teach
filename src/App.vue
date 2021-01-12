@@ -6,7 +6,17 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  mounted(){
+    this.axios.get('/api/index/index/isLogin').then(res=>{
+      if(res.data.code==200){
+        localStorage.setItem('login', 'true');
+      }else{
+        localStorage.setItem('login', 'false');
+      }
+    })
+  }
+  
 }
 </script>
 
@@ -28,13 +38,13 @@ export default {
 input,button{
   outline: none;
 }
-img{
+img.scal{
     transition: all 2s;
     -webkit-transition: all 2s;
     -moz-transition: all 2s;
     -o-transition: all 2s;
 }
-img:hover{
+img.scal:hover{
     transform: scale(1.1, 1.1);
     -webkit-taransform: scale(1.1, 1.1);
     -o-transform: scale(1.1, 1.1);
