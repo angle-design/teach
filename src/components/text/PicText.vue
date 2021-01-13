@@ -17,19 +17,22 @@ export default {
   },
   data(){
     return {
-        getClass:''
+        getClass:'iconfont icon-word'
     }
   },
   mounted(){
-     if(this.item.bo_suffix=='pdf'){
+    setTimeout(()=>{
+        if(this.item.bo_suffix=='pdf'){
       this.getClass='iconfont icon-pdf'
     }else if(this.item.bo_suffix=='docx'){
        this.getClass='iconfont icon-word'
     }else if(this.item.bo_suffix=='xlsx'){
       this.getClass='iconfont icon-xls'
-    }else{
+    }else if(this.item.bo_suffix=='ppt'){
       this.getClass='iconfont icon-ppt'
     }
+    },100)
+   
   }
 };
 </script>

@@ -70,7 +70,7 @@ export default {
   }
 }
 .home_body {
-  padding: 20px 0 100px;
+  padding: 20px 0 80px;
   background: #f8f8f8;
 }
 .footer {

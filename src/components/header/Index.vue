@@ -10,9 +10,21 @@
       <span class="login" @click="goLogin" v-if="loginflag == 'false'"
         >登陆</span
       >
+      <p v-else class="headbox">
+        <img :src="info.u_headimg" />{{ info.username
+        }}<font @click="loginOut">退出</font>
+      </p>
     </div>
     <div class="pup" v-if="flag">
-      <p v-html="codeData.img"></p>
+      <div class="pup_con">
+        <h4>注册登陆典例教案</h4>
+        <p v-html="codeData.img" class="code_img"></p>
+        <span
+          ><img
+            src="https://xcx.static.tongbux.com/xcx/20191029/5db7aa2b01911.png"
+          />微信扫码<br />扫码关注公众号登陆注册</span
+        >
+      </div>
     </div>
   </header>
 </template>
@@ -29,13 +41,34 @@ export default {
       flag: false,
       loginflag: false,
       unsername: "",
+      info: {},
     };
   },
   mounted() {
     this.loginflag = localStorage.getItem("login");
-    console.log(this.loginflag);
+    if (this.loginflag == "true") {
+      this.axios.get("/api/index/System/getUserInformation").then((res) => {
+        if (res.data.code == 200) {
+          this.info = res.data.data;
+          localStorage.setItem("info", this.info);
+        }
+      });
+    }
   },
   methods: {
+    // 推出登陆
+    loginOut() {
+      localStorage.clear();
+      this.axios.get("/api/index/index/logout").then((res) => {
+        if (res.data.code == 200) {
+          // localStorage.clear();
+          window.localStorage.removeItem('info')
+          window.localStorage.removeItem('login')
+          location.reload();
+          this.$router.push({ path: "/index" });
+        }
+      });
+    },
     // 去搜索
     toSearch() {
       if (this.keyword == "") {
@@ -93,7 +126,7 @@ export default {
             this.flag = false;
             this.unsername = res.data.data.unsername;
             localStorage.setItem("login", "true");
-            this.$forceUpdate();
+            location.reload();
           } else if (res.data.code == 100006) {
             this.loginflag = "true";
           } else {
@@ -125,6 +158,8 @@ export default {
   }
   .nav_right {
     display: flex;
+    height: 60px;
+    align-items: center;
     .search {
       width: 378px;
       height: 30px;
@@ -184,13 +219,70 @@ export default {
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.6);
+  z-index: 12;
+}
+.pup_con {
+  width: 300px;
+  height: 360px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -180px;
+  margin-left: -150px;
+  background: #fff;
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 12;
+  flex-direction: column;
+
+  h4 {
+    font-size: 26px;
+    font-weight: normal;
+    line-height: 80px;
+  }
   p {
-    width: 200px;
-    height: 200px;
+    padding: 10px;
+    border: 1px solid #cecece;
+    & > img {
+      width: 180px !important;
+      height: 180px !important;
+    }
+  }
+  span {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    font-size: 14px;
+    align-items: center;
+    line-height: 18px;
+    margin-top: 10px;
+    img {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+    }
+  }
+}
+.headbox {
+  display: flex;
+  align-items: center;
+  color: #333;
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+  font {
+    padding: 2px 10px;
+    background: #bd2025;
+    border-radius: 5px;
+    color: #fff;
+    margin-left: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    &:hover {
+      background: #c73d41;
+    }
   }
 }
 </style>

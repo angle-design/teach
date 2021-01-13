@@ -85,6 +85,8 @@ export default {
       display: flex;
       padding: 20px 0;
       width: 100%;
+      box-sizing: border-box;
+      flex-wrap: wrap;
       li {
         width: 50%;
         padding: 10px 20px 10px 20px;
@@ -100,6 +102,7 @@ export default {
         padding: 0 60px;
         display: flex;
         flex-direction: column;
+        box-sizing: border-box;
         li {
           display: flex;
           width: 100%;

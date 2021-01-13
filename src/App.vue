@@ -45,9 +45,13 @@ img.scal{
     -o-transition: all 2s;
 }
 img.scal:hover{
-    transform: scale(1.1, 1.1);
-    -webkit-taransform: scale(1.1, 1.1);
-    -o-transform: scale(1.1, 1.1);
-    -moz-transform: scale(1.1, 1.1);
+    transform: scale(1.05, 1.05);
+    -webkit-taransform: scale(1.05, 1.05);
+    -o-transform: scale(1.05, 1.05);
+    -moz-transform: scale(1.05, 1.05);
+}
+.code_img>img{
+   width:180px!important;
+      height:180px!important;
 }
 </style>

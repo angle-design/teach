@@ -138,15 +138,12 @@ export default {
     line-height:41px;
     width: 100%;
     ul {
-      width:700px;
-      padding-left:10px;
+      left:50%;
+      margin-left:-400px;
       display: flex;
-      justify-content: flex-end;
-      margin: 0 auto;
       font-size: 16px;
-      position: relative;
+      position: absolute;
       z-index:2;
-          margin-right: 420px;
       li {
         margin: 0 30px;
         padding: 0 10px;

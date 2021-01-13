@@ -6,7 +6,7 @@
           <li v-for="(item, i) in lesson.edition" :key="i" @mouseenter="toShow(i)" @mouseleave="toHide(i)">
             {{ item.e_name }}<i class="iconfont icon-youjiantou1"></i>
             <div class="pup_course" v-if="item.flag=='true'">
-              <span v-for="(item1,j) in item.booklet" :key="j" @click="toCoursedetails(item1.bb_id)">{{item1.name}}</span>
+              <span v-for="(item1,j) in item.booklet" :key="j" @click="toCoursedetails(item,item.bb_id)">{{item1.name}}</span>
               </div>
           </li>
         </ul>
@@ -82,7 +82,7 @@
           @click="toCourse(item.bo_id)"
         >
           <PicText :item="item"></PicText>
-          <span>{{ item.create_at }}</span>
+          <span>{{ item.create_at.split(' ')[0] }}</span>
         </li>
       </ul>
     </div>
@@ -160,10 +160,10 @@ export default {
       });
   },
   methods: {
-       toCoursedetails(obj){
-      alert(obj)
+       toCoursedetails(obj,id){
+         console.log(obj)
         let { href } = this.$router.resolve({
-          path: '/home/resource',query: {p_id:obj.p_id,s_id:obj.s_id,se_id:obj.se_id}
+          path: '/home/resource',query: {p_id:this.$route.query.p_id,s_id:this.$route.query.s_id,b_id:id,e_id:obj.e_id}
         });
           window.open(href, "_blank");
     },
@@ -413,6 +413,7 @@ export default {
   ul {
     display: flex;
     padding: 10px 0;
+    flex-wrap: wrap;
     li {
       display: flex;
       align-items: center;

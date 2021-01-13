@@ -26,9 +26,9 @@ export default {
   mounted() {
     if(this.item.bo_suffix=='pdf'){
       this.getClass='iconfont icon-pdf'
-    }else if(this.item.bo_suffix='docx'){
+    }else if(this.item.bo_suffix=='docx'){
        this.getClass='iconfont icon-word'
-    }else if(this.item.bo_suffix='xls'){
+    }else if(this.item.bo_suffix=='xlsx'){
       this.getClass='iconfont icon-xls'
     }else{
       this.getClass='iconfont icon-ppt'

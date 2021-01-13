@@ -39,12 +39,13 @@
           </button>
         </div>
       </div>
-      <div class="education_right"><div></div></div>
+      <div class="education_right"><div><Hot :type="1"></Hot></div></div>
     </div>
   </div>
 </template>
 
 <script>
+import Hot from "./Hot";
 import PicText from "@/components/text/PicText.vue";
 export default {
   name: "",
@@ -121,6 +122,7 @@ export default {
   },
   components: {
     PicText,
+    Hot
   },
 };
 </script>

@@ -28,8 +28,8 @@ export default {
   name: "",
   data() {
     return {
-      page: 1,
       newList: [],
+      page: 1,
       loading: false,
       noMore: false,
       flag: true,
@@ -66,15 +66,10 @@ export default {
     },
     handleScroll() {
       if (!this.flag) return;
-      var scrollTop =
-        document.documentElement.scrollTop || document.body.scrollTop;
-      var windowHeight =
-        document.documentElement.clientHeight || document.body.clientHeight;
-      var scrollHeight =
-        document.documentElement.scrollHeight || document.body.scrollHeight;
-      if (
-        scrollTop + windowHeight == scrollHeight - 0 &&
-        this.newList.length !== 0
+      var scrollTop =document.documentElement.scrollTop || document.body.scrollTop;
+      var windowHeight =document.documentElement.clientHeight || document.body.clientHeight;
+      var scrollHeight =document.documentElement.scrollHeight || document.body.scrollHeight;
+      if (scrollTop + windowHeight == scrollHeight - 0 &&this.newList.length !== 0
       ) {
         this.loading = true;
         this.page++;

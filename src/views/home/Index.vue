@@ -347,10 +347,9 @@ export default {
   methods: {
     // 进入三级页
     toCoursedetails(obj) {
-      // alert(obj);
       let { href } = this.$router.resolve({
         path: "/home/resource",
-        query: { p_id: obj.p_id, s_id: obj.s_id, se_id: obj.se_id },
+        query: { p_id: obj.p_id, s_id: obj.s_id, se_id: obj.se_id,e_id:obj.e_id},
       });
       window.open(href, "_blank");
     },
@@ -813,10 +812,10 @@ export default {
           overflow: hidden;
           div {
             margin-top: 15px;
-            line-height: 24px;
+            line-height: 26px;
             h4 {
               color: #b03333;
-              line-height: 32px;
+              line-height:38px;
               a {
                 color: #b03333;
                 text-decoration: none;

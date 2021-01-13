@@ -29,7 +29,7 @@ export default {
     },
     loop: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     direction: {
       type: String,

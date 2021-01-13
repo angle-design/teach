@@ -10,7 +10,7 @@
             ><span>编辑：{{ newdetail.author }}</span
             ><span>来源：典礼教案</span>
           </p>
-          <font class="collect-btn"   @click="goCollect(newdetail.nid)"
+          <font class="collect-btn" @click="goCollect(newdetail.nid)"
             ><i
               :class="[
                 newdetail.user_login == 1 && newdetail.type == 1
@@ -47,13 +47,14 @@ export default {
       .then((res) => {
         if (res.data.code == 200) {
           this.newdetail = res.data.data[0];
-          if (this.newdetail.user_login==1){
-            this.isCollect=true
+          if (this.newdetail.user_login == 1&&this.newdetail.type == 1) {
+            this.isCollect = true;
           }
         }
       });
   },
   methods: {
+    // 添加收藏
     goCollect(id) {
       if (this.newdetail.user_login == 0) {
         this.$message({
@@ -63,19 +64,40 @@ export default {
         });
         return false;
       }
-      this.axios
-        .get("/api/index/files/setTtoreUp", {
-          params: { su_type: 3, link_id: id },
-        })
-        .then((res) => {
-          if (res.data.code == 200) {
-            this.newdetail.type = this.newdetail.user_login == 1;
-            this.$message({
-              message: "收藏成功",
-              type: "success",
-            });
-          }
-        });
+      console.log(this.isCollect)
+      if (!this.isCollect) {
+        // 添加收藏
+        this.axios
+          .get("/api/index/files/setTtoreUp", {
+            params: { su_type: 2, link_id: id },
+          })
+          .then((res) => {
+            if (res.data.code == 200) {
+              this.newdetail.type = this.newdetail.user_login == 1;
+              this.isCollect = true;
+              this.$message({
+                message: "收藏成功",
+                type: "success",
+              });
+            }
+          });
+      } else {
+        // 取消收藏
+        this.axios
+          .get("/api/index/files/delToreup", {
+            params: { su_type: 2, link_id: id },
+          })
+          .then((res) => {
+            if (res.data.code == 200) {
+              this.$message({
+                message: "取消成功",
+                type: "success",
+              });
+              this.isCollect = false;
+              this.newdetail.type = 0;
+            }
+          });
+      }
     },
   },
   components: {

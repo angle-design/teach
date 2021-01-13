@@ -2,7 +2,7 @@
 <template>
   <div class="resource_upload">
     <div class="resource_left">
-      <el-col v-if="unit_section">
+      <el-col v-if="unit_section&&unit_section.length!==0">
         <el-menu
           class="el-menu-vertical-demo"
           @open="handleOpen"
@@ -31,6 +31,7 @@
                       style="margin-left: 68px"
                       v-for="(item4, g) in item3.child"
                       :key="g"
+                        :class="[item4.style==1?'is-active':'']"
                       :index="i + '-' + j + '-' + m + '-' + g + ''"
                       @click="toList(item1.id, item2.id, item3.id, item4.id)"
                       >{{ item4.name }}</el-menu-item
@@ -41,6 +42,7 @@
                     <el-menu-item
                       :key="m"
                       :index="i + '-' + j + '-' + m + ''"
+                      :class="[item3.style==1?'is-active':'']"
                       @click="toListOne(item1.id, item2.id, item3.id)"
                       >{{ item3.name }}</el-menu-item
                     >
@@ -169,7 +171,7 @@ export default {
         se_id: 0,
         books_id: 0,
         page: 1,
-        limit: 5,
+        limit: 8,
       },
       leftflag: false,
     };
@@ -217,7 +219,20 @@ export default {
       this.toTabList(5, b);
     },
     toTabList(type, id) {
+this.params.page = 1;
       if (type == 1) {
+        this.params={
+        p_id: 0,
+        s_id: 0,
+        ct_id: "",
+        e_id: 0,
+        b_id: 0,
+        ch_id: 0,
+        se_id: 0,
+        books_id: 0,
+        page: 1,
+        limit: 8,
+      },
         this.params.p_id = id;
       } else if (type == 2) {
         this.params.s_id = id;
@@ -238,31 +253,35 @@ export default {
     },
     //获取页面数据
     getList() {
+      // console.log(this.params.page)
       this.lesson = [];
-      this.params.page = 1;
+      this.unit_section=[];
+      
       this.axios.post("/api/index/books/book", this.params).then((res) => {
         if (res.data.code == 200) {
-          if (!this.leftflag) {
-        
+          // if (!this.leftflag) {
             this.unit_section = res.data.data.unit_section;
             var a = res.data.data.tighten.split("-");
             var b = ["0"];
             for (var i = 0; i < a.length; i++) {
+               if (i == 0) {
+                b.push(a[0]);
+              }
               if (i == 1) {
-                b.push(0 + "-" + a[0]);
+                b.push(a[0] + "-" + a[1]);
               }
               if (i == 2) {
-                b.push(0 + "-" + a[0] + "-" + a[1]);
+                b.push( a[0] + "-" + a[1]+ "-" + a[2]);
               }
+             
               if (i == 3) {
-                b.push(0 + "-" + a[0] + "-" + a[1] + "-" + a[2]);
+                b.push(a[0] + "-" + a[1]+ "-" + a[2]+ "-" + a[3]);
               }
             }
             this.openeds=b;
-            console.log(b)
-            this.leftflag = true;
-          }
-          
+            // console.log(b)
+          //   this.leftflag = true;
+          // }
           this.total = res.data.data.book_count;
 
           this.lesson = res.data.data;
@@ -270,8 +289,9 @@ export default {
       });
     },
     handleCurrentChange: function (currentPage) {
-      this.currentPage = currentPage;
-      this.params.page = this.currentPage;
+    // console.log(currentPage)
+      this.params.page=this.currentPage = currentPage;
+      // this.params.page = this.currentPage;
       this.getList();
     },
     handleOpen(key, keyPath) {},
@@ -354,13 +374,13 @@ export default {
         align-items: center;
         justify-content: center;
         color: #fff;
-        margin-right: 5px;
+        margin-right:5px;
       }
     }
   }
   .resource_right {
     width: 900px;
-    padding: 15px 0;
+    padding: 0 0 15px;
     font-size: 16px;
     .resource_right_body {
       border: 1px solid #e4e4e4;
